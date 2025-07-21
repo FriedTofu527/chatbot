@@ -1,0 +1,17 @@
+<frequently_asked_questions>
+    <question_and_answer>
+        <question></question>
+        <answer>
+            <answer_text></answer_text>
+            <answer_list>
+                <list_item>
+                    <category></category>
+                    <category_example></category_example>
+                </list_item>
+            </answer_list>
+            <answer_steps>
+                <step></step>
+            </answer_steps>
+        </answer>
+    </question_and_answer>
+</frequently_asked_questions>

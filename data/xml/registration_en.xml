@@ -1,0 +1,183 @@
+<frequently_asked_questions>
+    <question_and_answer>
+        <question>What is CACC Chinese School's registration policy for the 2025 - 2026 school year?</question>
+        <answer>
+            <answer_text>School registration policy is set as a guideline for registration. It includes the registration date, deadlines and refund policy. Please go to General Information for details.</answer_text>
+        </answer>
+    </question_and_answer>
+    <question_and_answer>
+        <question>How do I register online for classes?</question>
+        <answer>
+            <answer_text>You must have an account with CACC</answer_text>
+            <answer_steps>
+                <step>Create CACC account on CACC website</step>
+                <step>Log in to your account</step>
+                <step>Follow the instruction on the screen</step>
+            </answer_steps>
+        </answer>
+    </question_and_answer>
+    <question_and_answer>
+        <question>Why can't I register?</question>
+        <answer>
+            <answer_text>Registration begins on 5/3/2025. You will see all class information, but will only be able to register during its designated registration period. Contact us for any registration difficulties.</answer_text>
+            <answer_list>
+                <list_item>
+                    <category>From 5/3/2025 to before 5/9/2025: Reserved for current year teachers, room parents, BOD, and retired BOD</category>
+                </list_item>
+                <list_item>
+                    <category>From 5/9/2025 to before 5/16/2025: Reserved for all current year students</category>
+                </list_item>
+                <list_item>
+                    <category>From 5/16/2025: Open to public</category>
+                </list_item>
+            </answer_list>
+        </answer>
+    </question_and_answer>
+    <question_and_answer>
+        <question>What is the minimum age requirement?</question>
+        <answer>
+            <answer_text>Please go to General Information and scroll to Minimum Age, Class Size, and Cancellation for details.</answer_text>
+        </answer>
+    </question_and_answer>
+    <question_and_answer>
+        <question>What are the age ranges for beginner and intermediate enrichment classes?</question>
+        <answer>
+            <answer_text>Please refer to the class description for age requirement on each specific class. Please keep in mind that each child is a unique individual. We strongly recommend parents choose classes according to a child's ability and maturity, in addition to the child's age.</answer_text>
+        </answer>
+    </question_and_answer>
+    <question_and_answer>
+        <question>How do I determine my child's Chinese level?</question>
+        <answer>
+            <answer_text>For current students, we suggest that you talk to your child's teacher to find out the appropriate level for your student. We have placement tests for High School Chinese II, III, IV, and AP (not AP Prep) for next school year. On the first day of school, most Chinese classes will conduct a skill level assessment in class. Adjustments can then be made according to the assessment results.</answer_text>
+        </answer>
+    </question_and_answer>
+    <question_and_answer>
+        <question>How do I register for a Permission Required class?</question>
+        <answer>
+            <answer_text>In order to register a Permission Required class, you will normally need to get a permission first by taking a placement test and reach a desired score before the new school year begins, or obtain permission directly from the class teacher. In any other situation, please send an email to cs@caccusa.org.</answer_text>
+        </answer>
+    </question_and_answer>
+    <question_and_answer>
+        <question>What if the class I want to register for is full?</question>
+        <answer>
+            <answer_text>There is no waiting list for a class already full. Please check the class status online frequently to see if space becomes available when someone drops. Usually, in the first two weeks of school, there are a lot of class change activities. If you need further assistance, please email to cs-registration@caccusa.org.</answer_text>
+        </answer>
+    </question_and_answer>
+    <question_and_answer>
+        <question>How do I add a new student to my account?</question>
+        <answer>
+            <answer_text></answer_text>
+            <answer_steps>
+                <step>Log in to your account</step>
+                <step>Click My Profile menu</step>
+                <step>Click Student sub menu</step>
+                <step>Click 添加学生 button</step>
+                <step>Enter new student info and click Save</step>
+            </answer_steps>
+        </answer>
+    </question_and_answer>
+    <question_and_answer>
+        <question>How do I pay for my classes?</question>
+        <answer>
+            <answer_text>Please go to General Information and scroll to Payment Method for details.</answer_text>
+            <answer_steps>
+                <step>Log in to your account</step>
+                <step>If you don't have any required action to take, you will be directly taken to My Registration -&gt; Registration page</step>
+                <step>If you have balance due, the box will show the amount</step>
+                <step>Click Next button. Our system will eventually take you to the checkout page</step>
+                <step>Select a payment method to complete your payment by following the instructions</step>
+            </answer_steps>
+        </answer>
+    </question_and_answer>
+    <question_and_answer>
+        <question>How do I view my payments?</question>
+        <answer>
+            <answer_steps>
+                <step>Log in to your account</step>
+                <step>If you don't have any required action to take, you will be directly taken to My Registration -&gt; Registration page</step>
+                <step>Click the box</step>
+                <step>Click Payment Details link</step>
+            </answer_steps>
+        </answer>
+    </question_and_answer>
+    <question_and_answer>
+        <question>How do I withdraw or transfer a class?</question>
+        <answer>
+            <answer_text>After 9/4/2025, you must come to office or contact us for class withdrawal. On or before 9/4/2025,</answer_text>
+            <answer_steps>
+                <step>Log in to your account</step>
+                <step>If you don't have any required action to take, you will be directly taken to My Registration -&gt; Registration page</step>
+                <step>Click a student to show registered classes</step>
+                <step>Uncheck the class you want to widthdraw</step>
+                <step>If you check another class with the same period of the withdrawn one, you are actually doing a class transfer</step>
+                <step>Click Save</step>
+            </answer_steps>
+        </answer>
+    </question_and_answer>
+    <question_and_answer>
+        <question>Will I get a refund if I withdraw a class?</question>
+        <answer>
+            <answer_text>Please go to General Information and scroll to Refund Policy for details.</answer_text>
+        </answer>
+    </question_and_answer>
+    <question_and_answer>
+        <question>How do I find my class information?</question>
+        <answer>
+            <answer_steps>
+                <step>Log in to your account</step>
+                <step>Click My Classes menu</step>
+                <step>This will bring you to a page that shows all classes your family has registered</step>
+            </answer_steps>
+        </answer>
+    </question_and_answer>
+    <question_and_answer>
+        <question>May I observe a class?</question>
+        <answer>
+            <answer_text>Please go to General Information and scroll to Class Observation for details.</answer_text>
+        </answer>
+    </question_and_answer>
+    <question_and_answer>
+        <question>What is a waiver and when do I need it?</question>
+        <answer>
+            <answer_text>A waiver contains conditions that you are required to accept before being enrolled in the Chinese School. You must acknowledge you have read and agreed with these conditions before your registration can be completed. An additional waiver is required for certain enrichment classes. Teachers may hand out the additional waiver forms in the class.</answer_text>
+        </answer>
+    </question_and_answer>
+    <question_and_answer>
+        <question>What if I am too late for the online registration?</question>
+        <answer>
+            <answer_text>Please go to General Information and scroll to Tuition and Fees for details. If the online registration deadlines have passed, you may still register for some of the classes. Please take the following steps:</answer_text>
+            <answer_steps>
+                <step>Send an email to cs@caccusa.org or check with school office to see if space is still available</step>
+                <step>It is highly recommended to observe the class (must obtain a permission slip from the school office before going into the class)</step>
+                <step>Discuss with the teacher and the program director to determine if the class is appropriate to your student</step>
+                <step>Register the class per office staff instructions</step>
+                <step>Complete tuition payment within 7 days from the date of the registration/</step>
+            </answer_steps>
+        </answer>
+    </question_and_answer>
+    <question_and_answer>
+        <question>Are payments for the CACC Chinese School classes eligible for tax deduction?</question>
+        <answer>
+            <answer_text>CACC is not operating as a childcare service. Payments for the classes provided by CACC are generally not eligible for any tax benefits related to dependent care. Please refer to IRS Publication 503 for guidelines.</answer_text>
+        </answer>
+    </question_and_answer>
+    <question_and_answer>
+        <question>Who should I contact if I have any other questions?</question>
+        <answer>
+            <answer_list>
+                <list_item>
+                    <category>General Information page and this FAQ should answer 95% of your questions</category>
+                </list_item>
+                <list_item>
+                    <category>Visit Q215 on regular school days (view Calendar)</category>
+                </list_item>
+                <list_item>
+                    <category>Email to cs-registration@caccusa.org for registration related questions, such as login issue, payment status, etc.</category>
+                </list_item>
+                <list_item>
+                    <category>Email to cs@caccusa.org for all other or class-specific questions, such as Chinese classes, level to choose, placement test, etc.</category>
+                </list_item>
+            </answer_list>
+        </answer>
+    </question_and_answer>
+</frequently_asked_questions>
