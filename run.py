@@ -8,7 +8,7 @@ from sentence_transformers import SentenceTransformer
 GENERATION_MODEL = 'deepseek-r1:7b'
 ENCODING_MODEL = 'Qwen/Qwen3-Embedding-0.6B'
 N_RESULTS = 5
-DEBUG = True
+DEBUG = False
 
 
 def run() -> None:
