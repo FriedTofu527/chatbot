@@ -8,7 +8,7 @@ from sentence_transformers import SentenceTransformer
 GENERATION_MODEL = 'deepseek-r1:7b'
 ENCODING_MODEL = 'Qwen/Qwen3-Embedding-0.6B'
 N_RESULTS = 5
-DEBUG = False
+DEBUG = True
 
 
 def run() -> None:
@@ -29,7 +29,7 @@ def run() -> None:
 
     while True:
         user_input = input()
-        data = collection.query(query_embeddings=model.encode(sentences=user_input, prompt_name='query'), n_results=N_RESULTS)['documents'][0]
+        data = collection.query(query_embeddings=model.encode(sentences=user_input, prompt_name='query', convert_to_numpy=True), n_results=N_RESULTS)['documents']
         
         if DEBUG:
             print(data)

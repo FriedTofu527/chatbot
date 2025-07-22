@@ -15,7 +15,7 @@ def xml_parser(path: str) -> list:
     root = ET.parse(path).getroot()
 
     for problem in root:
-        document = problem[0].text
+        document = str(problem[0].text)
 
         for answer in problem[1]:
             if answer.tag == 'answer_text':
