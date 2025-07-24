@@ -11,6 +11,9 @@ N_RESULTS = 5
 DEBUG = False
 
 
+# Builds a database of documents and embeddings from picked files and 
+# queries the database to find documents most similar to the question. Then
+# prompts the model to answer the question using the documents.
 def run() -> None:
     collection = chromadb.Client().create_collection('collection')
     model = SentenceTransformer(ENCODING_MODEL)

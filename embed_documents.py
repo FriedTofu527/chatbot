@@ -10,6 +10,9 @@ DATA_DIRECTORY = os.getcwd() + '/data'
 DEBUG = False
 
 
+# Takes a path to an XML file stored as a string and returns a list of documents
+# compiled from the file as a list of strings where each string represents a
+# document.
 def xml_parser(path: str) -> list:
     documents = []
     root = ET.parse(path).getroot()
@@ -31,6 +34,9 @@ def xml_parser(path: str) -> list:
     return documents
 
 
+# Takes a path to a CSV file stored as a string and returns a list of documents
+# compiled from the file as a list of strings where each string represents a
+# document.
 def csv_parser(path: str) -> list:
     documents = []
 
@@ -50,6 +56,9 @@ def csv_parser(path: str) -> list:
     return documents
 
 
+# Builds a list of documents as a list of strings where each string is a
+# document. Also computes the embeddings of each document and stores them in an
+# array. Both are then pickled and stored in files for later use.
 def run() -> None:
     model = SentenceTransformer(ENCODING_MODEL)
     documents = []
