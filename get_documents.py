@@ -2,7 +2,14 @@ import requests
 import bs4
 
 
-DEBUG = True
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#                                                                           #
+#                                DO NOT USE                                 #
+#                                                                           #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+DEBUG = False
 SOURCES = ['https://www.caccusa.org/faq.php?p=1', 
            'https://www.caccusa.org/faq.php?p=2', 
            'https://www.caccusa.org/faq.php?p=3', 

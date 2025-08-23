@@ -9,7 +9,7 @@ from sentence_transformers import SentenceTransformer
 ENCODING_MODEL = 'Qwen/Qwen3-Embedding-0.6B'
 EMBEDDING_SIZE = 1024
 DATA_DIRECTORY = os.getcwd() + '/data'
-DEBUG = True
+DEBUG = False
 
 
 # Takes a path to an XML file stored as a string and returns a list of documents

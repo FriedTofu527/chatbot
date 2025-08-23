@@ -9,7 +9,7 @@ from openai import OpenAI
 GENERATION_MODEL = 'deepseek-r1:7b'
 ENCODING_MODEL = 'Qwen/Qwen3-Embedding-0.6B'
 N_RESULTS = 40
-DEBUG = True
+DEBUG = False
 SYSTEM_PROMPT = """
 You are a helpful chatbot working for the Chinese American Cooperation Council (CACC), helping a user efficiently fulfill their request while adhering closely to provided guidelines.
 
