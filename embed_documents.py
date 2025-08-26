@@ -20,19 +20,19 @@ def xml_parser(path: str) -> list[str]:
     root = ET.parse(path).getroot()
 
     for problem in root:
-        document = str(problem[0].text)
+        document = [str(problem[0].text)]
 
         for answer in problem[1]:
             if answer.tag == 'answer_text':
-                document += f' {answer.text}'
+                document.append(str(answer.text))
             elif answer.tag == 'answer_list':
                 for item in answer:
                     for category in item:
-                        document += f' {category.text}'
+                        document.append(str(category.text))
             else:
                 for step in answer:
-                    document += f'{step.text}'
-        documents.append(document)
+                    document.append(str(step.text))
+        documents.append(' '.join(document))
     return documents
 
 
@@ -46,14 +46,14 @@ def csv_parser(path: str) -> list[str]:
         categories = file.readline().split(',')
         current = file.readline()
 
-        while current != '':
-            document = ''
+        while current:
+            document = []
             current = current.split(',')
 
             for i in range(len(categories)):
-                document += f'{categories[i]} = {current[i]} '
+                document.append(f'{categories[i]}: {current[i]}.')
 
-            documents.append(document)
+            documents.append(' '.join(document))
             current = file.readline()
     return documents
 
@@ -65,7 +65,7 @@ def txt_parser(path: str) -> list[str]:
     with open(path, 'r') as file:
         current = file.readline()
 
-        while current != '':
+        while current:
             documents.append(current.strip())
             current = file.readline()
     return [' '.join(documents)]
