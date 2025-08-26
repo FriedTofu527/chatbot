@@ -58,7 +58,8 @@ def csv_parser(path: str) -> list[str]:
     return documents
 
 
-# 
+# Takes a path to a txt file stored as a string and returns a list containing
+# a single string representing one document. 
 def txt_parser(path: str) -> list[str]:
     documents = []
 
