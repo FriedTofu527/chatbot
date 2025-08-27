@@ -38,23 +38,23 @@ def xml_parser(path: str) -> list[str]:
 
 # Takes a path to a CSV file stored as a string and returns a list of documents
 # compiled from the file as a list of strings where each string represents a
-# document.
+# document. This CSV was exported from Excel. Not designed to handle other 
+# formats!!!
 def csv_parser(path: str) -> list[str]:
     documents = []
 
     with open(path, 'r') as file:
-        categories = file.readline().split(',')
-        current = file.readline()
+        categories = list(map(str.strip, file.readline().split(',')))
+        current = list(map(str.strip, file.readline().split(',')))
 
-        while current:
+        while current != ['']:
             document = []
-            current = current.split(',')
 
             for i in range(len(categories)):
-                document.append(f'{categories[i]}: {current[i]}.')
+                document.append(f'{categories[i]}: {current[i] if current[i] else 'None'}.')
 
             documents.append(' '.join(document))
-            current = file.readline()
+            current = list(map(str.strip, file.readline().split(',')))
     return documents
 
 
@@ -67,7 +67,8 @@ def txt_parser(path: str) -> list[str]:
         current = file.readline()
 
         while current:
-            documents.append(current.strip())
+            if current.strip():
+                documents.append(current.strip())
             current = file.readline()
     return [' '.join(documents)]
 

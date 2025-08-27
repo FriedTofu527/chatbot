@@ -1,0 +1,11 @@
+
+
+Line 3: This is some sample data.
+Line 4: After being parsed the output should be a single string in a list.
+Line 5: Each line should be separated by a space.
+Line 6: Empty Lines should be ingored.
+
+
+Line 9:
+Line 10:
+Line 11: This is the last line.
