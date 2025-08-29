@@ -1,4 +1,4 @@
-from collections.abc import Iterator
+import os
 
 import requests
 import bs4
@@ -6,7 +6,7 @@ import bs4
 
 PARSER = 'lxml'
 TRIM_THRESHOLD = 20
-DEBUG = True
+DATA_DIRECTORY = os.getcwd() + '/data'
 FAQ_SOURCES = ['https://www.caccusa.org/faq.php?p=1', 
                'https://www.caccusa.org/faq.php?p=2', 
                'https://www.caccusa.org/faq.php?p=3', 
@@ -22,6 +22,7 @@ PROGRAMS_SOURCES = ['https://www.caccusa.org/program.php?p=10',
                    'https://www.caccusa.org/program.php?p=12',
                    'https://www.caccusa.org/program.php?p=14',
                    'https://www.caccusa.org/program.php?p=16']
+DEBUG = False
 
 
 def page_getter(urls: list[str]) -> dict[str, str]:
@@ -47,7 +48,7 @@ def page_parser(sources: list[str], search: tuple[str, dict], tag: str, recursiv
                 for target in result.find_all(tag, recursive=recursive):
                     document = ' '.join(target.stripped_strings)
                     if not trim or len(document) > TRIM_THRESHOLD:
-                        documents.append(document)
+                        documents.append(document.replace('\n', ' '))
             else:
                 if DEBUG:
                     print(f'Parsing error. Skipping URL = {url}')
@@ -70,14 +71,14 @@ def programs_parser() -> list[str]:
                     if isinstance(row, bs4.Tag):
                         for header in row.find_all('th'):
                             if isinstance(header, bs4.Tag):
-                                cn.append(f'课程名称：{str(header.string).strip()}。')
-                                en.append(f'Class name: {str(header.string).strip()}.')
+                                cn.append(f'课程名称：{str(header.string).strip()}。课程说明：')
+                                en.append(f'Class name: {str(header.string).strip()}. Class description:')
                         for tag in row.find_all(True, {'class': 'cn'}):
                             cn.extend(tag.stripped_strings)
                         for tag in row.find_all(True, {'class': 'en'}):
                             en.extend(tag.stripped_strings)
-                documents.append(' '.join(cn))
-                documents.append(' '.join(en))
+                documents.append(''.join(cn).replace('\n', '。'))
+                documents.append(' '.join(en).replace('\n', '. '))
         else:
             if DEBUG:
                 print(f'Parsing error. Skipping URL = {url}.')
@@ -93,7 +94,13 @@ def run() -> None:
     documents.extend(page_parser(FAQ_SOURCES, ('div', {'class': 'panel panel-body'}), 'div', False, True))
     documents.extend(programs_parser())
 
-    print(len(documents))
+    if DEBUG:
+        print(len(documents))
+
+    with open(DATA_DIRECTORY + '/documents/documents.txt', 'w') as file:
+        for document in documents:
+            file.write(document)
+            file.write('\n')
 
 
 if __name__ == '__main__':

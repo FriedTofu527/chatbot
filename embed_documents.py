@@ -1,7 +1,6 @@
 import numpy as np
 import os
 import pickle
-import xml.etree.ElementTree as ET
 
 from sentence_transformers import SentenceTransformer
 
@@ -9,30 +8,16 @@ from sentence_transformers import SentenceTransformer
 ENCODING_MODEL = 'Qwen/Qwen3-Embedding-0.6B'
 EMBEDDING_SIZE = 1024
 DATA_DIRECTORY = os.getcwd() + '/data'
-DEBUG = False
+DEBUG = True
 
 
-# Takes a path to an XML file stored as a string and returns a list of documents
-# compiled from the file as a list of strings where each string represents a
-# document.
-def xml_parser(path: str) -> list[str]:
+# 
+def document_parser(path: str) -> list[str]:
     documents = []
-    root = ET.parse(path).getroot()
+    
+    with open(path, 'r') as file:
+        documents.extend(map(str.strip, file.readlines()))
 
-    for problem in root:
-        document = [str(problem[0].text).strip()]
-
-        for answer in problem[1]:
-            if answer.tag == 'answer_text':
-                document.append(str(answer.text).strip())
-            elif answer.tag == 'answer_list':
-                for item in answer:
-                    for category in item:
-                        document.append(str(category.text))
-            else:
-                for step in answer:
-                    document.append(str(step.text))
-        documents.append(' '.join(document))
     return documents
 
 
@@ -80,21 +65,21 @@ def run() -> None:
     model = SentenceTransformer(ENCODING_MODEL)
     documents = []
 
-    for filename in os.listdir(DATA_DIRECTORY + '/xml'):
-        documents.extend(xml_parser(DATA_DIRECTORY + '/xml/' + filename))
+    for filename in os.listdir(DATA_DIRECTORY + '/documents'):
+        documents.extend(document_parser(DATA_DIRECTORY + '/documents/' + filename))
         if DEBUG:
-            print(str(len(documents)))
+            print(len(documents))
 
     for filename in os.listdir(DATA_DIRECTORY + '/csv'):
         documents.extend(csv_parser(DATA_DIRECTORY + '/csv/' + filename))
         if DEBUG:
-            print(str(len(documents)))
+            print(len(documents))
     
     for filename in os.listdir(DATA_DIRECTORY + '/txt'):
         if filename != '.DS_Store':
             documents.extend(txt_parser(DATA_DIRECTORY + '/txt/' + filename))
         if DEBUG:
-            print(str(len(documents)))
+            print(len(documents))
 
     embeddings = np.empty(shape=(len(documents), EMBEDDING_SIZE), dtype=float)
 
