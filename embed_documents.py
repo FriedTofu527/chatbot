@@ -11,7 +11,6 @@ DATA_DIRECTORY = os.getcwd() + '/data'
 DEBUG = True
 
 
-# 
 def document_parser(path: str) -> list[str]:
     documents = []
     
