@@ -20,11 +20,11 @@ def xml_parser(path: str) -> list[str]:
     root = ET.parse(path).getroot()
 
     for problem in root:
-        document = [str(problem[0].text)]
+        document = [str(problem[0].text).strip()]
 
         for answer in problem[1]:
             if answer.tag == 'answer_text':
-                document.append(str(answer.text))
+                document.append(str(answer.text).strip())
             elif answer.tag == 'answer_list':
                 for item in answer:
                     for category in item:
