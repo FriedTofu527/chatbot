@@ -16,7 +16,7 @@ def document_parser(path: str) -> list[str]:
     
     with open(path, 'r') as file:
         documents.extend(map(str.strip, file.readlines()))
-
+    print(documents)
     return documents
 
 

@@ -69,7 +69,7 @@ def programs_parser() -> list[str]:
                 for j in range(i, i + 2):
                     row = rows[j]
                     if isinstance(row, bs4.Tag):
-                        for header in row.find_all('th'):
+                        for header in row.find_all('th', recursive=False):
                             if isinstance(header, bs4.Tag):
                                 cn.append(f'课程名称：{str(header.string).strip()}。课程说明：')
                                 en.append(f'Class name: {str(header.string).strip()}. Class description:')
