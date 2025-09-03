@@ -55,16 +55,10 @@ def run():
         for i in range(0, len(embedded_rewritten_queries)):
             query_embeddings[i] = embedded_rewritten_queries[i].embedding
 
-        query_results = collection.query(query_embeddings=query_embeddings, n_results=N_RESULTS)
-        document_data = query_results['documents']
-        distances_data = query_results['distances']
-        if document_data is not None:
-            for query_result in document_data:
+        query_results = collection.query(query_embeddings=query_embeddings, n_results=N_RESULTS)['documents']
+        if query_results is not None:
+            for query_result in query_results:
                 data.update(query_result)
-
-        if distances_data is not None:
-            for distance in distances_data:
-                print(distance)
 
         if DEBUG:
             for item in data:
