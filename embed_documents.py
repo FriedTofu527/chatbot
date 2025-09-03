@@ -1,14 +1,13 @@
 import numpy as np
 import os
-import pickle
 
-from sentence_transformers import SentenceTransformer
+import chromadb
+from openai import OpenAI
 
 
-ENCODING_MODEL = 'Qwen/Qwen3-Embedding-0.6B'
-EMBEDDING_SIZE = 1024
+EMBEDDING_SIZE = 3072
 DATA_DIRECTORY = os.getcwd() + '/data'
-DEBUG = True
+DEBUG = False
 
 
 def document_parser(path: str) -> list[str]:
@@ -16,7 +15,6 @@ def document_parser(path: str) -> list[str]:
     
     with open(path, 'r') as file:
         documents.extend(map(str.strip, file.readlines()))
-    print(documents)
     return documents
 
 
@@ -61,8 +59,10 @@ def txt_parser(path: str) -> list[str]:
 # document. Also computes the embeddings of each document and stores them in an
 # array. Both are then pickled and stored in files for later use.
 def run() -> None:
-    model = SentenceTransformer(ENCODING_MODEL)
+    client = OpenAI()
     documents = []
+
+    collection = chromadb.PersistentClient().get_or_create_collection('collection')
 
     for filename in os.listdir(DATA_DIRECTORY + '/documents'):
         documents.extend(document_parser(DATA_DIRECTORY + '/documents/' + filename))
@@ -79,19 +79,14 @@ def run() -> None:
             documents.extend(txt_parser(DATA_DIRECTORY + '/txt/' + filename))
         if DEBUG:
             print(len(documents))
-
-    embeddings = np.empty(shape=(len(documents), EMBEDDING_SIZE), dtype=float)
-
-    for i in range(0, len(embeddings)):
-        embeddings[0] = model.encode(sentences=documents[i], prompt_name='document')
-        if DEBUG:
-            print(str((i * 100.0 / len(embeddings)) // 1) + '%')
-
-    with open('documents', 'w+b') as file:
-        pickle.dump(documents, file)
     
-    with open('embeddings', 'w+b') as file:
-        pickle.dump(embeddings, file)
+    embeddings = np.empty(shape=(len(documents), EMBEDDING_SIZE), dtype=float)
+    response = client.embeddings.create(input=documents, model='text-embedding-3-large')
+
+    for i in range(0, len(documents)):
+        embeddings[i] = response.data[i].embedding
+
+    collection.upsert(ids=list(map(str, range(0, len(documents)))), embeddings=embeddings, documents=documents)
 
 
 if __name__ == '__main__':
