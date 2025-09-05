@@ -9,7 +9,6 @@ from openai import OpenAI
 N_RESULTS = 20
 EMBEDDING_SIZE = 3072
 PROMPTS_DIRECTORY = os.getcwd() + '/prompts'
-DEBUG = False
 JSON_SCHEMA = {
     'type': 'object',
     'properties': {
@@ -24,6 +23,7 @@ JSON_SCHEMA = {
     'additionalProperties': False,
     'required': ['queries']
 }
+DEBUG = True
 
 
 def run():

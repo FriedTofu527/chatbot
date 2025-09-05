@@ -40,19 +40,19 @@ def csv_parser(path: str) -> list[str]:
     return documents
 
 
-# Takes a path to a txt file stored as a string and returns a list containing
-# a single string representing one document. 
-def txt_parser(path: str) -> list[str]:
-    documents = []
+# # Takes a path to a txt file stored as a string and returns a list containing
+# # a single string representing one document. 
+# def txt_parser(path: str) -> list[str]:
+#     documents = []
 
-    with open(path, 'r') as file:
-        current = file.readline()
+#     with open(path, 'r') as file:
+#         current = file.readline()
 
-        while current:
-            if current.strip():
-                documents.append(current.strip())
-            current = file.readline()
-    return [' '.join(documents)]
+#         while current:
+#             if current.strip():
+#                 documents.append(current.strip())
+#             current = file.readline()
+#     return [' '.join(documents)]
 
 
 # Builds a list of documents as a list of strings where each string is a
@@ -74,11 +74,11 @@ def run() -> None:
         if DEBUG:
             print(len(documents))
     
-    for filename in os.listdir(DATA_DIRECTORY + '/txt'):
-        if filename != '.DS_Store':
-            documents.extend(txt_parser(DATA_DIRECTORY + '/txt/' + filename))
-        if DEBUG:
-            print(len(documents))
+    # for filename in os.listdir(DATA_DIRECTORY + '/txt'):
+    #     if filename != '.DS_Store':
+    #         documents.extend(txt_parser(DATA_DIRECTORY + '/txt/' + filename))
+    #     if DEBUG:
+    #         print(len(documents))
     
     embeddings = np.empty(shape=(len(documents), EMBEDDING_SIZE), dtype=float)
     response = client.embeddings.create(input=documents, model='text-embedding-3-large')
