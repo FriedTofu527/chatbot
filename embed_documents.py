@@ -62,7 +62,7 @@ def run() -> None:
     client = OpenAI()
     documents = []
 
-    collection = chromadb.PersistentClient().get_or_create_collection('collection')
+    collection = chromadb.PersistentClient().get_or_create_collection('collection', {'hnsw': {'space': 'cosine', 'ef_construction': 800, 'max_neighbors': 64}})
 
     for filename in os.listdir(DATA_DIRECTORY + '/documents'):
         documents.extend(document_parser(DATA_DIRECTORY + '/documents/' + filename))

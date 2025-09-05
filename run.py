@@ -3,10 +3,14 @@ import numpy as np
 import os
 
 import chromadb
+import openai
 from openai import OpenAI
 
 
-N_RESULTS = 20
+DEBUG = False
+EMBEDDING_MODEL = 'text-embedding-3-large'
+GENERATING_MODEL = 'gpt-4.1-mini'
+N_RESULTS = 30
 EMBEDDING_SIZE = 3072
 PROMPTS_DIRECTORY = os.getcwd() + '/prompts'
 JSON_SCHEMA = {
@@ -23,50 +27,92 @@ JSON_SCHEMA = {
     'additionalProperties': False,
     'required': ['queries']
 }
-DEBUG = True
 
 
-def run():
+def load_prompt(path: str) -> str:
+    with open(path, 'r') as file:
+        return ''.join(file.readlines())
+
+
+def parse_embedding_response(embedding_response: openai.types.CreateEmbeddingResponse) -> np.ndarray:
+    embeddings = np.empty(shape=(len(embedding_response.data), EMBEDDING_SIZE), dtype=float)
+    for i in range(0, len(embedding_response.data)):
+        embeddings[i] = embedding_response.data[i].embedding
+    return embeddings
+
+
+def rewrite_queries(client: OpenAI, prompt: str, query: str) -> list[str]:
+    try:
+        rewritten_queries = json.loads(client.responses.create(model=GENERATING_MODEL, instructions=prompt, input=f'Original query: {query}', text={'format': {'type': 'json_schema', 'name': 'rewritten_queries', 'strict': True, 'schema': JSON_SCHEMA}}).output_text).get('queries')
+        if DEBUG:
+            print('-----------------------\nRewritten Queries Start\n-----------------------')
+            for rewritten_query in rewritten_queries:
+                print(rewritten_query)
+            print('---------------------\nRewritten Queries End\n---------------------')
+        return rewritten_queries
+    except:
+        print(f'OpenAI API error. Failed to rewrite query: {prompt}. Continuing with original query. This may result in reduced retrieval performance.')
+        return [query]
+
+
+def embed_queries(client: OpenAI, queries: list[str]) -> np.ndarray:
+    try:
+        return parse_embedding_response(client.embeddings.create(input=queries, model=EMBEDDING_MODEL))
+    except:
+        print(f'OpenAI API error. Failed to embed queries: {f'\'{'\', \''.join(queries)}\''}. Aborting.')
+        raise RuntimeError('Failed to embed queries.')
+
+
+def query_database(collection: chromadb.Collection, query_embeddings: np.ndarray) -> set[str]:
+    try:
+        documents = set()
+        query_response = collection.query(query_embeddings=query_embeddings, n_results=N_RESULTS)
+        query_documents = query_response.get('documents')
+        if query_documents is not None:
+            for query_document in query_documents:
+                documents.update(query_document)
+        if DEBUG:
+            print('-------------------------\nRetrieved Documents Start\n-------------------------')
+            for document in documents:
+                print(document)
+            print('-----------------------\nRetrieved Documents End\n-----------------------')
+            query_distances = query_response.get('distances')
+            if query_distances is not None:
+                print('-----------------------------------\nRetrieved Documents Distances Start\n-----------------------------------')
+                for query_distance in query_distances:
+                    print(query_distance)
+                print('---------------------------------\nRetrieved Documents Distances End\n---------------------------------')
+        return documents
+    except:
+        print(f'Database error. Failed to retrieve documents. Aborting.')
+        raise RuntimeError('Failed to retrieve documents.')
+
+
+def generate_answer(client: OpenAI, prompt: str, documents: set[str], query: str) -> str:
+    try:
+        return client.responses.create(model=GENERATING_MODEL, instructions=prompt + '<document>' + '</document><document>'.join(documents) + '</document>', input=query).output_text
+    except:
+        print(f'OpenAI API error. Failed to generate answer. Aborting.')
+        raise RuntimeError('Failed to generate answer.')
+
+
+def main():
     client = OpenAI()
     collection = chromadb.PersistentClient().get_collection('collection')
-
-    with open(PROMPTS_DIRECTORY + '/generating.txt', 'r') as file:
-        generating_prompt = ''.join(file.readlines())
-
-    with open(PROMPTS_DIRECTORY + '/rewriting.txt', 'r') as file:
-        rewriting_prompt = ''.join(file.readlines())
+    generating_prompt = load_prompt(PROMPTS_DIRECTORY + '/generating.txt')
+    rewriting_prompt = load_prompt(PROMPTS_DIRECTORY + '/rewriting.txt')
 
     if DEBUG:
         print(f'{collection.count()} documents loaded.')
-
     print('Ready.')
 
     while True:
-        data = set()
         query = input()
-
-        rewritten_queries = json.loads(client.responses.create(model='gpt-4.1-mini', instructions=rewriting_prompt, input=f'Original query: {query}', text={'format': {'type': 'json_schema', 'name': 'rewritten_queries', 'strict': True, 'schema': JSON_SCHEMA}}).output_text).get('queries')
-        if DEBUG:
-            for rewritten_query in rewritten_queries:
-                print(rewritten_query)
-        
-        embedded_rewritten_queries = client.embeddings.create(input=rewritten_queries, model='text-embedding-3-large').data
-        query_embeddings = np.empty(shape=(len(embedded_rewritten_queries), EMBEDDING_SIZE), dtype=float)
-        for i in range(0, len(embedded_rewritten_queries)):
-            query_embeddings[i] = embedded_rewritten_queries[i].embedding
-
-        query_results = collection.query(query_embeddings=query_embeddings, n_results=N_RESULTS)['documents']
-        if query_results is not None:
-            for query_result in query_results:
-                data.update(query_result)
-
-        if DEBUG:
-            for item in data:
-                print(item)
-
-        if data is not None:
-            print(client.responses.create(model='gpt-4.1-mini', instructions=generating_prompt + '<document>' + '</document> <document>'.join(data) + '</document>', input=query).output_text)
+        rewritten_queries = rewrite_queries(client, rewriting_prompt, query)
+        embedded_rewritten_queries = embed_queries(client, rewritten_queries)
+        documents = query_database(collection, embedded_rewritten_queries)
+        print(generate_answer(client, generating_prompt, documents, query))
 
 
 if __name__ == '__main__':
-    run()
+    main()

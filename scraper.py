@@ -105,7 +105,7 @@ def visit(to_be_visited: list[str], discovered: set[str]) -> list[str]:
 def main() -> None:
     to_be_visited = list()
     discovered = set()
-    documents = []
+    documents = list('')
 
     for url in PAGES:
         to_be_visited.append(url)
@@ -118,6 +118,8 @@ def main() -> None:
 
     with open(DATA_DIRECTORY + '/documents/automatic.txt', 'w') as file:
         for document in documents:
+            document = document.removeprefix('Main Content CACC Chinese School ')
+            document = document.removeprefix('School Day Holiday Special Day / Deadline ')
             if len(document) < 200:
                 document = ''
             if document:
