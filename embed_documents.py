@@ -9,8 +9,8 @@ from openai import OpenAI
 
 DEBUG = False
 EMBEDDING_SIZE = 3072
-EF_CONSTRUCTION = 800
-MAX_NEIGHBORS = 64
+EF_CONSTRUCTION = 200
+MAX_NEIGHBORS = 32
 EMBEDDING_MODEL = 'text-embedding-3-large'
 DATA_DIRECTORY = os.getcwd() + '/data'
 
@@ -23,24 +23,20 @@ def parse_embedding_response(embedding_response: openai.types.CreateEmbeddingRes
 
 
 def parse_document(path: str) -> list[str]:
-    documents = list()
+    documents = []
     with open(path, 'r') as file:
         documents.extend(map(str.strip, file.readlines()))
     return documents
 
 
-# Takes a path to a CSV file stored as a string and returns a list of documents
-# compiled from the file as a list of strings where each string represents a
-# document. This CSV was exported from Excel. Not designed to handle other 
-# formats!!!
 def parse_csv(path: str) -> list[str]:
-    documents = list()
+    documents = []
     with open(path, 'r') as file:
         try:
             categories = list(map(str.strip, file.readline().split(',')))
             current = list(map(str.strip, file.readline().split(',')))
             while current != ['']:
-                document = list()
+                document = []
                 for i in range(len(categories)):
                     document.append(f'{categories[i]}: {current[i] if current[i] else 'None'}.')
                 documents.append(' '.join(document))
@@ -51,10 +47,8 @@ def parse_csv(path: str) -> list[str]:
     return documents
 
 
-# Takes a path to a txt file stored as a string and returns a list containing
-# a single string representing one document. 
 def parse_txt(path: str) -> list[str]:
-    documents = list()
+    documents = []
     with open(path, 'r') as file:
         current = file.readline()
         while current:
@@ -64,14 +58,15 @@ def parse_txt(path: str) -> list[str]:
     return [' '.join(documents)]
 
 
-def load_documents(dir: str, func: typing.Callable[[str], list[str]]) -> list[str]:
+def load_documents(directory: str, parsing_function: typing.Callable[[str], list[str]]) -> list[str]:
     try:
-        documents = list()
-        for file_name in os.listdir(dir):
-            documents.extend(func(dir + '/' + file_name))
+        documents = []
+        for file_name in os.listdir(directory):
+            if file_name != '.DS_Store':
+                documents.extend(parsing_function(directory + '/' + file_name))
         return documents
     except:
-        print(f'Parsing Error. Failed to load documents in directory: {dir} with parsing function {func}. Aborting.')
+        print(f'Parsing Error. Failed to load documents in directory: {directory} with parsing function {parsing_function}. Aborting.')
         raise RuntimeError('Failed to load documents.')
 
 
@@ -79,16 +74,13 @@ def embed_documents(client: OpenAI, documents: list[str]) -> np.ndarray:
     try:
         return parse_embedding_response(client.embeddings.create(input=documents, model=EMBEDDING_MODEL))
     except:
-        print(f'OpenAI API error. Failed to embed documents: {f'\'{'\', \''.join(documents)}\''}. Aborting.')
+        print(f'OpenAI API error. Failed to embed documents: \'{'\', \''.join(documents)}\'. Aborting.')
         raise RuntimeError('Failed to embed documents.')
 
 
-# Builds a list of documents as a list of strings where each string is a
-# document. Also computes the embeddings of each document and stores them in an
-# array. Both are then pickled and stored in files for later use.
 def main() -> None:
     client = OpenAI()
-    documents = list()
+    documents = []
     collection = chromadb.PersistentClient().get_or_create_collection('collection', {'hnsw': {'space': 'cosine', 'ef_construction': EF_CONSTRUCTION, 'max_neighbors': MAX_NEIGHBORS}})
 
     documents.extend(load_documents(DATA_DIRECTORY + '/documents', parse_document))
