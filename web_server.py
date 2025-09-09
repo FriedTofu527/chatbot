@@ -1,21 +1,27 @@
-import asyncio
-
-from fastapi import FastAPI
 from openai import AsyncOpenAI
 import chromadb
+import fastapi
+import typing
 import uvicorn
 
 import run
 
 
-API = FastAPI()
+API = fastapi.FastAPI()
 CLIENT = AsyncOpenAI()
 COLLECTION = chromadb.PersistentClient().get_collection('collection')
 GENERATING_PROMPT = run.load_prompt('prompts/generating.txt')
 REWRITING_PROMPT = run.load_prompt('prompts/rewriting.txt')
+WHITELISTED_IPS = ['66.96.130.58', '73.170.102.89']
 
 
-# @API.middleware('http')
+@API.middleware('http')
+async def validata_ip(request: fastapi.Request, call_next: typing.Callable) -> fastapi.responses.JSONResponse:
+    if request.client:
+        ip = str(request.client.host)
+        if ip not in WHITELISTED_IPS:
+            return fastapi.responses.JSONResponse(status_code=fastapi.status.HTTP_400_BAD_REQUEST, content={'message': f'IP {ip} is not allowed to access this resource.'})
+    return call_next(request)
 
 
 @API.get('/query')
