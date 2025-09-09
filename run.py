@@ -1,10 +1,11 @@
+import asyncio
 import json
 import numpy as np
 import os
 
 import chromadb
 import openai
-from openai import OpenAI
+from openai import AsyncOpenAI
 
 
 DEBUG = False
@@ -41,9 +42,9 @@ def parse_embedding_response(embedding_response: openai.types.CreateEmbeddingRes
     return embeddings
 
 
-def rewrite_queries(client: OpenAI, prompt: str, query: str) -> list[str]:
+async def rewrite_queries(client: AsyncOpenAI, prompt: str, query: str) -> list[str]:
     try:
-        rewritten_queries = json.loads(client.responses.create(model=GENERATING_MODEL, instructions=prompt, input=f'Original query: {query}', text={'format': {'type': 'json_schema', 'name': 'rewritten_queries', 'strict': True, 'schema': JSON_SCHEMA}}).output_text).get('queries')
+        rewritten_queries = json.loads((await client.responses.create(model=GENERATING_MODEL, instructions=prompt, input=f'Original query: {query}', text={'format': {'type': 'json_schema', 'name': 'rewritten_queries', 'strict': True, 'schema': JSON_SCHEMA}})).output_text).get('queries')
         if DEBUG:
             print('-----------------------\nRewritten Queries Start\n-----------------------')
             for rewritten_query in rewritten_queries:
@@ -55,9 +56,9 @@ def rewrite_queries(client: OpenAI, prompt: str, query: str) -> list[str]:
         return [query]
 
 
-def embed_queries(client: OpenAI, queries: list[str]) -> np.ndarray:
+async def embed_queries(client: AsyncOpenAI, queries: list[str]) -> np.ndarray:
     try:
-        return parse_embedding_response(client.embeddings.create(input=queries, model=EMBEDDING_MODEL))
+        return parse_embedding_response((await client.embeddings.create(input=queries, model=EMBEDDING_MODEL)))
     except:
         print(f'OpenAI API error. Failed to embed queries: {f'\'{'\', \''.join(queries)}\''}. Aborting.')
         raise RuntimeError('Failed to embed queries.')
@@ -88,16 +89,16 @@ def query_database(collection: chromadb.Collection, query_embeddings: np.ndarray
         raise RuntimeError('Failed to retrieve documents.')
 
 
-def generate_answer(client: OpenAI, prompt: str, documents: set[str], query: str) -> str:
+async def generate_answer(client: AsyncOpenAI, prompt: str, documents: set[str], query: str) -> str:
     try:
-        return client.responses.create(model=GENERATING_MODEL, instructions=prompt + '<document>' + '</document><document>'.join(documents) + '</document>', input=query).output_text
+        return (await client.responses.create(model=GENERATING_MODEL, instructions=prompt + '<document>' + '</document><document>'.join(documents) + '</document>', input=query)).output_text
     except:
         print(f'OpenAI API error. Failed to generate answer. Aborting.')
         raise RuntimeError('Failed to generate answer.')
 
 
-def main():
-    client = OpenAI()
+async def main():
+    client = AsyncOpenAI()
     collection = chromadb.PersistentClient().get_collection('collection')
     generating_prompt = load_prompt(PROMPTS_DIRECTORY + '/generating.txt')
     rewriting_prompt = load_prompt(PROMPTS_DIRECTORY + '/rewriting.txt')
@@ -108,11 +109,11 @@ def main():
 
     while True:
         query = input()
-        rewritten_queries = rewrite_queries(client, rewriting_prompt, query)
-        embedded_rewritten_queries = embed_queries(client, rewritten_queries)
+        rewritten_queries = await rewrite_queries(client, rewriting_prompt, query)
+        embedded_rewritten_queries = await embed_queries(client, rewritten_queries)
         documents = query_database(collection, embedded_rewritten_queries)
-        print(generate_answer(client, generating_prompt, documents, query))
+        print(await generate_answer(client, generating_prompt, documents, query))
 
 
 if __name__ == '__main__':
-    main()
+    asyncio.run(main())
