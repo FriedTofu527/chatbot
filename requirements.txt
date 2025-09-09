@@ -1,0 +1,5 @@
+beautifulsoup4
+chromadb
+openai
+fastapi[standard-no-fastapi-cloud-cli]
+requests
