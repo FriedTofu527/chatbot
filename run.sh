@@ -1,1 +1,1 @@
-fastapi run web_server.py --port=25565 --log_level=info
+fastapi run web_server.py --port=25565
