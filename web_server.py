@@ -25,4 +25,4 @@ async def query(q: str) -> dict[str, str]:
 
 
 if __name__ == '__main__':
-    uvicorn.run(API, host='0.0.0.0', port=25565)
+    uvicorn.run(API, host='0.0.0.0', port=25565, log_level='debug')
