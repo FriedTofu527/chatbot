@@ -29,7 +29,7 @@ API.add_middleware(CORSMiddleware, allow_origins=ALLOWED_ORIGINS, allow_credenti
 #     return call_next(request)
 
 
-@API.get('/query')
+@API.post('/query')
 async def query(q: str) -> dict[str, str]:
     if q:
         rewritten_queries = await run.rewrite_queries(CLIENT, REWRITING_PROMPT, q)
