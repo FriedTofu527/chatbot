@@ -1,9 +1,8 @@
-/lib/
-/chroma/
-.DS_Store
-/include/
-/bin/
-/lib/
 /__pycache__/
+/bin/
+/chroma/
+/include/
+/lib/
 /share/
-.pyvenv.cfg
+pyvenv.cfg
+.DS_Store
