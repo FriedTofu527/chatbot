@@ -3,6 +3,7 @@ import chromadb
 import fastapi
 import typing
 import uvicorn
+from fastapi.middleware.cors import CORSMiddleware
 
 import run
 
@@ -13,15 +14,19 @@ COLLECTION = chromadb.PersistentClient().get_collection('collection')
 GENERATING_PROMPT = run.load_prompt('prompts/generating.txt')
 REWRITING_PROMPT = run.load_prompt('prompts/rewriting.txt')
 WHITELISTED_IPS = ['66.96.130.58', '73.170.102.89']
+ALLOWED_ORIGINS = ['https://www.caccusa.org', 'https://dev.caccusa.org']
 
 
-@API.middleware('http')
-async def validata_ip(request: fastapi.Request, call_next: typing.Callable) -> fastapi.responses.JSONResponse:
-    if request.client:
-        ip = str(request.client.host)
-        if ip not in WHITELISTED_IPS:
-            return fastapi.responses.JSONResponse(status_code=fastapi.status.HTTP_400_BAD_REQUEST, content={'message': f'IP {ip} is not allowed to access this resource.'})
-    return call_next(request)
+API.add_middleware(CORSMiddleware, allow_origins=ALLOWED_ORIGINS, allow_credentials=True, allow_methods=['*'], allow_headers=['*'],)
+
+
+# @API.middleware('http')
+# async def validata_ip(request: fastapi.Request, call_next: typing.Callable) -> fastapi.responses.JSONResponse:
+#     if request.client:
+#         ip = str(request.client.host)
+#         if ip not in WHITELISTED_IPS:
+#             return fastapi.responses.JSONResponse(status_code=fastapi.status.HTTP_400_BAD_REQUEST, content={'message': f'IP {ip} is not allowed to access this resource.'})
+#     return call_next(request)
 
 
 @API.get('/query')
