@@ -1,4 +1,9 @@
 /lib/
 /chroma/
 .DS_Store
-test.py
+/include/
+/bin/
+/lib/
+/__pycache__/
+/share/
+.pyvenv.cfg

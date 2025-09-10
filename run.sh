@@ -1,1 +1,1 @@
-fastapi run web_server.py --port=25565
+uvicorn web_server:API --port=25565 --host=0.0.0.0
