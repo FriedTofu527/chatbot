@@ -31,7 +31,7 @@ out a lot of details here but that's the basic overview.
 
 ## Installation Guide
 
-    You need to have Python installed. I'm using a mac so I used the homebrew
+You need to have Python installed. I'm using a mac so I used the homebrew
 package manager to do that. You can find the installation instructions for
 homebrew on their page here: https://brew.sh. Just run the command to install
 it. Then after you have homebrew installed. run the command
@@ -66,19 +66,13 @@ the port can be any port you have open.
     To summarize, I'm going to list all of the commands you need to set
 everything up.
 
-    ```brew install python3```
-
-    ```git clone https://github.com/FriedTofu527/chatbot.git```
-
-    ```cd chatbot```
-
-    ```python3 -m venv .venv```
-
-    ```source .venv/bin/activate```
-
-    ```pip install -r requirements.txt```
-    
-    ```uvicorn web_server:API --port=<open_port> --host=0.0.0.0```
+    brew install python3```
+    git clone https://github.com/FriedTofu527/chatbot.git```
+    cd chatbot```
+    python3 -m venv .venv```
+    source .venv/bin/activate```
+    pip install -r requirements.txt```
+    uvicorn web_server:API --port=<open_port> --host=0.0.0.0```
 
 ## run.py
 
