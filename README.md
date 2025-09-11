@@ -65,12 +65,19 @@ use 0.0.0.0 for host. 127.0.0.1 or my public ip did not work. I'm pretty sure
 the port can be any port you have open.
     To summarize, I'm going to list all of the commands you need to set
 everything up.
+
     ```brew install python3```
+
     ```git clone https://github.com/FriedTofu527/chatbot.git```
+
     ```cd chatbot```
+
     ```python3 -m venv .venv```
+
     ```source .venv/bin/activate```
+
     ```pip install -r requirements.txt```
+    
     ```uvicorn web_server:API --port=<open_port> --host=0.0.0.0```
 
 ## run.py
