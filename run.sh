@@ -1,1 +1,1 @@
-uvicorn web_server:API --port=25565 --host=0.0.0.0
+uvicorn web_server:API --host=0.0.0.0

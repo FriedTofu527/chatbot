@@ -1,6 +1,6 @@
-#Documentation
+# Documentation
 
-##Overview
+## Overview
 
 I'm going to start with an overview of the design of this chatbot program. 
 This type of chatbot runs on a system called retrieval augmented generation or
@@ -29,11 +29,51 @@ The LLM then returns an answer and we give that answer to the user. I'm leaving
 out a lot of details here but that's the basic overview. 
 
 
-##Installation Guide
+## Installation Guide
 
+    You need to have Python installed. I'm using a mac so I used the homebrew
+package manager to do that. You can find the installation instructions for
+homebrew on their page here: https://brew.sh. Just run the command to install
+it. Then after you have homebrew installed. run the command
+```brew install python3``` to get the newest version of Python.
+    Next You will need to set up a Python virtual environment. I don't know why
+but you are supposed to have a separate Python environment for every project. 
+This way you can keep everything separate and manage different versions of
+libraries. This is done through a virtual environment. Before you make the
+environment, clone this repo. You can do this by running this command
+```git clone https://github.com/FriedTofu527/chatbot.git```. This will create a
+new directory called chatbot that contains the repo. Then you want to move into
+the directory and make the virtual environment there. You can do this with the
+command ```cd chatbot```. Now that you are in the directory, you can make the
+virtual environment with this command ```python3 -m venv .venv```. This will
+make a directory in the current directory called .venv. This contains your
+virtual environment.
+    Now you want to activate the virtual environment. In the same directory,
+chatbot, enter this command to activate it: ```source .venv/bin/activate```.
+this will run the activation script in the virtual environment. You should now
+see (.venv) before your username in the shell.
+    Now that the virtual environment is activated, you can install all the
+external dependencies. This just means we need to install all of the third
+party libraries the program needs that aren't included in Python's standard
+library. To do this, simply run ```pip install -r requirements.txt```. This
+will get you everything you need. It might take a while though since each third
+party library has their own dependencies. 
+    Now everything should be just works<sup>TM</sup>.
+    To start the server you can run the run.sh script or use the command
+```uvicorn web_server:API --port=<open_port> --host=0.0.0.0```. Make sure you
+use 0.0.0.0 for host. 127.0.0.1 or my public ip did not work. I'm pretty sure
+the port can be any port you have open.
+    To summarize, I'm going to list all of the commands you need to set
+everything up.
+    ```brew install python3```
+    ```git clone https://github.com/FriedTofu527/chatbot.git```
+    ```cd chatbot```
+    ```python3 -m venv .venv```
+    ```source .venv/bin/activate```
+    ```pip install -r requirements.txt```
+    ```uvicorn web_server:API --port=<open_port> --host=0.0.0.0```
 
-
-##run.py
+## run.py
 
 I'm going to start with run.py because it is the simplest. This contains all of
 the code that runs when the chatbot is running. All the code in the other

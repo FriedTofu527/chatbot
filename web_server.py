@@ -29,8 +29,19 @@ API.add_middleware(CORSMiddleware, allow_origins=ALLOWED_ORIGINS, allow_credenti
 #     return call_next(request)
 
 
+@API.get('/query')
+async def get_query(q: str) -> dict[str, str]:
+    if q:
+        rewritten_queries = await run.rewrite_queries(CLIENT, REWRITING_PROMPT, q)
+        embedded_rewritten_queries = await run.embed_queries(CLIENT, rewritten_queries)
+        documents = run.query_database(COLLECTION, embedded_rewritten_queries)
+        return {'text': await run.generate_answer(CLIENT, GENERATING_PROMPT, documents, q), 'error': ''}
+    else:
+        return {'text': '', 'error': 'Query string cannot be empty.'}
+
+
 @API.post('/query')
-async def query(q: str) -> dict[str, str]:
+async def post_query(q: str) -> dict[str, str]:
     if q:
         rewritten_queries = await run.rewrite_queries(CLIENT, REWRITING_PROMPT, q)
         embedded_rewritten_queries = await run.embed_queries(CLIENT, rewritten_queries)
