@@ -9,8 +9,8 @@ from openai import OpenAI
 
 DEBUG = False
 EMBEDDING_SIZE = 3072
-EF_CONSTRUCTION = 200
-MAX_NEIGHBORS = 32
+EF_CONSTRUCTION = 100
+MAX_NEIGHBORS = 16
 EMBEDDING_MODEL = 'text-embedding-3-large'
 DATA_DIRECTORY = os.getcwd() + '/data'
 

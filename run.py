@@ -11,7 +11,7 @@ from openai import AsyncOpenAI
 DEBUG = False
 EMBEDDING_MODEL = 'text-embedding-3-large'
 GENERATING_MODEL = 'gpt-4.1-mini'
-N_RESULTS = 30
+N_RESULTS = 20
 EMBEDDING_SIZE = 3072
 PROMPTS_DIRECTORY = os.getcwd() + '/prompts'
 JSON_SCHEMA = {

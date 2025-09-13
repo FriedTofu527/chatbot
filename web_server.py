@@ -4,6 +4,7 @@ import fastapi
 import typing
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
 import run
 
@@ -15,6 +16,10 @@ GENERATING_PROMPT = run.load_prompt('prompts/generating.txt')
 REWRITING_PROMPT = run.load_prompt('prompts/rewriting.txt')
 WHITELISTED_IPS = ['66.96.130.58', '73.170.102.89']
 ALLOWED_ORIGINS = ['https://www.caccusa.org', 'https://dev.caccusa.org']
+
+
+class Query(BaseModel):
+    query: str = ''
 
 
 API.add_middleware(CORSMiddleware, allow_origins=ALLOWED_ORIGINS, allow_credentials=True, allow_methods=['*'], allow_headers=['*'],)
@@ -41,12 +46,12 @@ async def get_query(q: str) -> dict[str, str]:
 
 
 @API.post('/query')
-async def post_query(q: str) -> dict[str, str]:
+async def post_query(q: Query) -> dict[str, str]:
     if q:
-        rewritten_queries = await run.rewrite_queries(CLIENT, REWRITING_PROMPT, q)
+        rewritten_queries = await run.rewrite_queries(CLIENT, REWRITING_PROMPT, q.query)
         embedded_rewritten_queries = await run.embed_queries(CLIENT, rewritten_queries)
         documents = run.query_database(COLLECTION, embedded_rewritten_queries)
-        return {'text': await run.generate_answer(CLIENT, GENERATING_PROMPT, documents, q), 'error': ''}
+        return {'text': await run.generate_answer(CLIENT, GENERATING_PROMPT, documents, q.query), 'error': ''}
     else:
         return {'text': '', 'error': 'Query string cannot be empty.'}
 
